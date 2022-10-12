@@ -19,7 +19,7 @@ public class Main {
                 System.out.println("Expressão do arquivo é válida? " + verificaExpressao(line)); //tirar
 
                 if (!verificaExpressao(line)) {
-                    System.out.println(verificaErroDaExpressao(line));
+                    //System.out.println(verificaErroDaExpressao(line));
                 }
 //                 else {
 //                    System.out.println(Calculator(line));
@@ -40,7 +40,7 @@ public class Main {
 //        System.out.println("{[()}} ? " + verificaExpressao("{[()}}"));
 //
 //        System.out.println("{[(]} ? " + verificaErroDaExpressao("{[(]}"));
-//        System.out.println("{[()}} ? " + verificaErroDaExpressao("{[()}}"));
+    System.out.println("{ ( 12 + 34 ) * [ ( 47 - 17 / ( 60 - 20 ) ] } \n" + verificaErroDaExpressao("{ ( 12 + 34 ) * [ ( 47 - 17 / ( 60 - 20 ) ] }"));
 
     }
 
@@ -79,6 +79,9 @@ public class Main {
         public static String verificaErroDaExpressao(String s) {
             Pilha pilha = new Pilha();
             Pilha pilhaInicial = new Pilha();
+            Pilha pilhaChaves = new Pilha();
+            Pilha pilhaColchetes = new Pilha();
+            Pilha pilhaParenteses = new Pilha();
             boolean problem = false;
             boolean braceProblem = false;
             boolean bracketProblem = false;
@@ -88,80 +91,99 @@ public class Main {
             char right = '0';
             String expression = "ERRO!!!";
 
-            //Primeira verificação, se temos pares de {}, [] ou ()
+            // Primeira verificação, se tudo que abre - {, [ e ( - fecha - }, ] e ).
             for (int i = 0; i < s.length(); i++) {
                 // Pega cada caractere da string
                 char c = s.charAt(i);
 
-                if (c == '{' || c == '}') {
-                    pilhaInicial.push(c);
-                    if (pilhaInicial.size() % 2 != 0) {
-                        expression = "Está falando um } na expressão!";
-                    }
-                }
-                if (c == '[' || c == ']') {
-                    pilhaInicial.push(c);
-                    if (pilhaInicial.size() % 2 != 0) {
-                        expression = "Está falando um ] na expressão!";
-                    }
-                }
-                if (c == '(' || c == ')') {
-                    pilhaInicial.push(c);
-                    if (pilhaInicial.size() % 2 != 0) {
-                        expression = "Está falando um ) na expressão!";
 
-                    }
+                if (c == '{' || c == '[' || c == '(' || c == '}' || c == ']' || c == ')') {
+                    pilhaInicial.push(c);
                 }
             }
 
+            if (pilhaInicial.size() % 2 != 0) {
+                pilhaChaves.clear();
+                pilhaColchetes.clear();
+                pilhaParenteses.clear();
+                //Verificando qual abre-fecha que está faltando
+                for (int i = 0; i < s.length(); i++) {
+                    // Pega cada caractere da string
+                    char c = s.charAt(i);
 
+                    if (c == '{' || c == '}') {
+                        pilhaChaves.push(c);
 
-            for (int i = 0; i < s.length(); i++) {
-                // Pega cada caractere da string
-                char c = s.charAt(i);
+                    }
+                    else if (c == '[' || c == ']') {
+                        pilhaColchetes.push(c);
 
-                // Verifica se eh um "abre" para empilhar
-                if (c == '{' || c == '[' || c == '(') {
-                    pilha.push(c);
+                    }
+                    else if (c == '(' || c == ')') {
+                        pilhaParenteses.push(c);
+
+                    }
                 }
+                if (pilhaChaves.size() % 2 != 0) {
+                    expression = "Está falando um } na expressão!" + pilhaChaves.size();
+                }
+                else if (pilhaColchetes.size() % 2 != 0) {
+                    expression = "Está falando um ] na expressão!" + pilhaColchetes.size();
+                }
+                else if (pilhaParenteses.size() % 2 != 0) {
+                    expression = "Está falando um ) na expressão!" + pilhaParenteses.size();
+                }
+            }
 
-                // Senao, desempilha e verifica se o "par" esta correto
-                else {
-                     if (c == '}' || c == ']' || c == ')') {
-                        char aux = pilha.pop();
-                        // Verifica se o "par" está correto
-                        if (c == '}' && aux != '{') {
-                            problem = true;
-                            braceProblem = true;
-                            reverseRight = aux;
-                            wrong = c;
-                            if (reverseRight == '{') right = '}';
-                            if (reverseRight == '[') right = ']';
-                            if (reverseRight == '(') right = ')';
-                            expression = wrong + " no lugar de " + right;
-                            break;
-                        }
-                        if (c == ']' && aux != '[') {
-                            problem = true;
-                            bracketProblem = true;
-                            reverseRight = aux;
-                            wrong = c;
-                            if (reverseRight == '{') right = '}';
-                            if (reverseRight == '[') right = ']';
-                            if (reverseRight == '(') right = ')';
-                            expression = wrong + " no lugar de " + right;
-                            break;
-                        }
-                        if (c == ')' && aux != '(') {
-                            problem = true;
-                            parenthesisProblem = true;
-                            reverseRight = aux;
-                            wrong = c;
-                            if (reverseRight == '{') right = '}';
-                            if (reverseRight == '[') right = ']';
-                            if (reverseRight == '(') right = ')';
-                            expression = wrong + " no lugar de " + right;
-                            break;
+            else {
+
+                for (int i = 0; i < s.length(); i++) {
+                    // Pega cada caractere da string
+                    char c = s.charAt(i);
+
+                    // Verifica se eh um "abre" para empilhar
+                    if (c == '{' || c == '[' || c == '(') {
+                        pilha.push(c);
+                    }
+
+                    // Senao, desempilha e verifica se o "par" esta correto
+                    else {
+                        if (c == '}' || c == ']' || c == ')') {
+                            char aux = pilha.pop();
+                            // Verifica se o "par" está correto
+                            if (c == '}' && aux != '{') {
+                                problem = true;
+                                braceProblem = true;
+                                reverseRight = aux;
+                                wrong = c;
+                                if (reverseRight == '{') right = '}';
+                                if (reverseRight == '[') right = ']';
+                                if (reverseRight == '(') right = ')';
+                                expression = wrong + " no lugar de " + right;
+                                break;
+                            }
+                            if (c == ']' && aux != '[') {
+                                problem = true;
+                                bracketProblem = true;
+                                reverseRight = aux;
+                                wrong = c;
+                                if (reverseRight == '{') right = '}';
+                                if (reverseRight == '[') right = ']';
+                                if (reverseRight == '(') right = ')';
+                                expression = wrong + " no lugar de " + right;
+                                break;
+                            }
+                            if (c == ')' && aux != '(') {
+                                problem = true;
+                                parenthesisProblem = true;
+                                reverseRight = aux;
+                                wrong = c;
+                                if (reverseRight == '{') right = '}';
+                                if (reverseRight == '[') right = ']';
+                                if (reverseRight == '(') right = ')';
+                                expression = wrong + " no lugar de " + right;
+                                break;
+                            }
                         }
                     }
                 }
