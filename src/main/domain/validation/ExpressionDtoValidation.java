@@ -1,11 +1,16 @@
 package src.main.domain.validation;
 
-public class ExpressionValidator {
+import src.main.domain.types.Stack;
 
-    static boolean validate(String expression){
+public class ExpressionDtoValidation {
 
-        //todo: valida expressao
-        
-        return true;
+    private ExpressionDtoValidation() {
+    }
+
+    public static Stack validate(String expression) {
+
+        // todo: valida expressao
+
+        return new Stack();
     }
 }

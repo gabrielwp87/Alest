@@ -1,4 +1,4 @@
-package src.domain.types;
+package src.main.domain.types;
 
 public class Stack {
 
@@ -33,7 +33,7 @@ public class Stack {
         if (new_node == null)
             return '0';  // AJEITAR ************************
 
-        else { // se tem apenas 1 elemento na pilha
+        else { // se tem apenas 1 elemento na stack
             exit = new_node.data;
             head_ref = head_ref.next;
 

@@ -21,5 +21,5 @@ public class Calculator {
 // Exemplo do que tem que devolver (return):
 //    Expressão: { ( 5 + 12 ) + [ ( 10 - 8 ) ^ 3 ] }
 //    Resultado: 25.0
-//    Tamanho máximo da pilha: 8
+//    Tamanho máximo da stack: 8
 }
