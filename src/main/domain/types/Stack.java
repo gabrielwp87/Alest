@@ -1,4 +1,6 @@
-public class Pilha {
+package src.domain.types;
+
+public class Stack {
 
     private int count = 0;
     // Link list node
@@ -16,7 +18,7 @@ public class Pilha {
     // Push a node to linked list.
 // Note that this function
 // changes the head
-    static void push(char new_data)
+    public static void push(char new_data)
     {
         Node new_node = new Node();
         new_node.data = new_data;
@@ -25,7 +27,7 @@ public class Pilha {
 
     }
 
-    static char pop() {
+    public static char pop() {
         char exit;
         Node new_node = head_ref;
         if (new_node == null)
