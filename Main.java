@@ -40,7 +40,7 @@ public class Main {
 //        System.out.println("{[()}} ? " + verificaExpressao("{[()}}"));
 //
 //        System.out.println("{[(]} ? " + verificaErroDaExpressao("{[(]}"));
-    System.out.println("{ ( 12 + 34 ) * [ ( 47 - 17 / ( 60 - 20 ) ] } \n" + verificaErroDaExpressao("{ ( 12 + 34 ) * [ ( 47 - 17 / ( 60 - 20 ) ] }"));
+    System.out.println("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] } \n" + verificaErroDaExpressao("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] }"));
 
     }
 

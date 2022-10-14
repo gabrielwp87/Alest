@@ -1,61 +1,110 @@
+/*
+Implementação de uma pilha usando estruturas encadeadas, que deve ter exatamente os seguintes métodos,
+ conforme visto em aula: push(e), pop(), top(), size(), isEmpty() e clear().
+ */
+
+import java.util.EmptyStackException;
+
 public class Pilha {
 
-    private int count = 0;
-    // Link list node
-    static class Node
-    {
-        char data;
-        Node next;
-
-    };
-
-    static Node head_ref;
+    //public class DoubleLinkedListOfInteger {
+        // Referencia para o sentinela de inicio da pilha usando estrtura encadeada.
+        private Node header;
+        // Referencia para o sentinela de fim da pilha usando estrtura encadeada.
+        private Node trailer;
+        // Contador do numero de elementos da pilha.
+        private int count;
 
 
-
-    // Push a node to linked list.
-// Note that this function
-// changes the head
-    static void push(char new_data)
-    {
-        Node new_node = new Node();
-        new_node.data = new_data;
-        new_node.next = head_ref;
-        head_ref = new_node;
-
-    }
-
-    static char pop() {
-        char exit;
-        Node new_node = head_ref;
-        if (new_node == null)
-            return '0';  // AJEITAR ************************
-
-        else { // se tem apenas 1 elemento na pilha
-            exit = new_node.data;
-            head_ref = head_ref.next;
-
-            return exit;
+        private class Node {
+            public char element;
+            public Node next;
+            public Node prev;
+            public Node(char e) {
+                element = e;
+                next = null;
+                prev = null;
+            }
         }
-    }
 
-    public boolean isEmpty() {
-        return head_ref == null;
-    }
-
-    public int size() {
-        int resultado = 0;
-        Node new_node = head_ref;
-        while (new_node != null) {
-            new_node = new_node.next;
-            resultado++;
+        public Pilha() {
+            header = new Node('0');
+            trailer = new Node('0');
+            header.next = trailer;
+            trailer.prev = header;
+            count = 0;
         }
-        return resultado;
-    }
 
-    public void clear() {
-        head_ref = null;
-    }
+        /**
+         * Adiciona um elemento no topo da pilha
+         * @param element elemento a ser adicionado
+         */
+        public void push(Character element) {
+            // Primeiro cria o nodo
+            Node nodo = new Node(element);
+            // Conecta o nodo criado na pilha
+            nodo.prev = header;
+            nodo.next = header.next;
+            // Atualiza os encadeamentos
+            header.next.prev = nodo;
+            header.next = nodo;
+            // Atualiza count
+            count++;
+        }
+
+
+        /**
+         * Remove o elemento que está no topo da pilha
+         * @return o elemento que estava no topo da pilha
+         */
+        public Character pop() {
+            // Primeiro verifica se a pilha está vazia
+            if (count <= 0) throw new EmptyStackException();
+
+            Node aux = header.next;
+            char elemento = aux.element;
+            header.next = aux.next;
+            aux.next.prev = header;
+            count--;
+
+            return elemento;
+        }
+
+
+
+        /**
+         * Retorna o elemento que se encontra no topo da lista
+         * @throws EmptyStackException se a pilha estiver vazia
+         */
+        public Character top() {
+            // Primeiro verifica se a pilha está vazia
+            if (count <= 0) throw new EmptyStackException();
+            Node aux = trailer.prev;
+
+            return aux.element;
+        }
+
+        /**
+         * @return o numero de elementos da pilha
+         */
+        public int size() {
+            return count;
+        }
+
+        /**
+         * @return true se a pilha não contem elementos
+         */
+        public boolean isEmpty() {
+            return (count == 0);
+        }
+
+        /**
+         * Esvazia a pilha
+         */
+        public void clear() {
+
+            header.next = trailer;
+            trailer.prev = header;
+            count = 0;
+        }
 }
-
-
