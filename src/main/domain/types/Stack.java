@@ -1,6 +1,6 @@
 package src.main.domain.types;
 
-public class Stack {
+public class   Stack {
 
     private int count = 0;
     // Link list node
@@ -18,7 +18,7 @@ public class Stack {
     // Push a node to linked list.
 // Note that this function
 // changes the head
-    public static void push(char new_data)
+    public  void push(char new_data)
     {
         Node new_node = new Node();
         new_node.data = new_data;
@@ -27,7 +27,7 @@ public class Stack {
 
     }
 
-    public static char pop() {
+    public  char pop() {
         char exit;
         Node new_node = head_ref;
         if (new_node == null)

@@ -2,15 +2,16 @@ package src.main.domain.model;
 
 import src.main.domain.dto.ExpressionDto;
 import src.main.domain.types.Stack;
+import src.main.utils.StackCopier;
 
 public class ExpressionModel {
-    private Stack expression;
+    private final Stack expression;
 
     public ExpressionModel(ExpressionDto expressionDto) {
         this.expression = expressionDto.getExpression();
     }
 
     public Stack getExpression() {
-        return this.expression;
+        return StackCopier.copy(expression);
     }
 }
