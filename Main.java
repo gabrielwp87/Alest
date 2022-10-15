@@ -14,10 +14,10 @@ public class Main {
         try {
             reader = Files.newBufferedReader(path1, Charset.defaultCharset());
             String line = null;
-            int nExpression = 0;
+            //int nExpression = 0;
             while ((line = reader.readLine()) != null) {
-                nExpression++;
-                System.out.println("Expressão " + nExpression + " do arquivo é válida? " + verificaExpressao(line)); //tirar
+                //nExpression++;
+                //System.out.println("Expressão " + nExpression + " do arquivo é válida? " + verificaExpressao(line)); //tirar
 
                 if (!verificaExpressao(line)) {
                     System.out.println(verificaErroDaExpressao(line));
@@ -30,21 +30,7 @@ public class Main {
         } catch (IOException e) {
             System.err.format("Erro na leitura do arquivo: ", e);
         }
-
-
-//        System.out.println("{[()]} ? " + verificaExpressao("{[()]}"));
-//        System.out.println("{[(2)]} ? " + verificaExpressao("{[(2)]}"));
-//        System.out.println("{[(2)]} ? " + verificaExpressao("{ [ ( 2 ) ] }"));
-//        System.out.println("{[(2)]} ? " + verificaExpressao("{ [ ( 2  + 2 ) ] }"));
-//        System.out.println("{[(2)]} ? " + verificaExpressao("{ 2 * [ 2 * ( 2  + 2 ) * 2 ] * 2 }"));
-//        System.out.println("{[(]} ? " + verificaExpressao("{[(]}"));
-//        System.out.println("{[()}} ? " + verificaExpressao("{[()}}"));
-//
-//        System.out.println("{[(]} ? " + verificaErroDaExpressao("{[(]}"));
-  //  System.out.println("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] } \n" + verificaErroDaExpressao("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] }"));
-
     }
-
         public static boolean verificaExpressao (String s){
             Pilha pilha = new Pilha();
 
@@ -83,10 +69,6 @@ public class Main {
             Pilha pilhaChaves = new Pilha();
             Pilha pilhaColchetes = new Pilha();
             Pilha pilhaParenteses = new Pilha();
-            boolean problem = false;
-            boolean braceProblem = false;
-            boolean bracketProblem = false;
-            boolean parenthesisProblem = false;
             char reverseRight = '0';
             char wrong = '0';
             char right = '0';
@@ -126,13 +108,13 @@ public class Main {
                     }
                 }
                 if (pilhaChaves.size() % 2 != 0) {
-                    expression = "Está falando um } na expressão!" + pilhaChaves.size();
+                    expression = "Está falando um } na expressão!";
                 }
                 else if (pilhaColchetes.size() % 2 != 0) {
-                    expression = "Está falando um ] na expressão!" + pilhaColchetes.size();
+                    expression = "Está falando um ] na expressão!";
                 }
                 else if (pilhaParenteses.size() % 2 != 0) {
-                    expression = "Está falando um ) na expressão!" + pilhaParenteses.size();
+                    expression = "Está falando um ) na expressão!";
                 }
             }
 
@@ -153,8 +135,6 @@ public class Main {
                             char aux = pilha.pop();
                             // Verifica se o "par" está correto
                             if (c == '}' && aux != '{') {
-                                problem = true;
-                                braceProblem = true;
                                 reverseRight = aux;
                                 wrong = c;
                                 if (reverseRight == '{') right = '}';
@@ -164,8 +144,6 @@ public class Main {
                                 break;
                             }
                             if (c == ']' && aux != '[') {
-                                problem = true;
-                                bracketProblem = true;
                                 reverseRight = aux;
                                 wrong = c;
                                 if (reverseRight == '{') right = '}';
@@ -175,8 +153,6 @@ public class Main {
                                 break;
                             }
                             if (c == ')' && aux != '(') {
-                                problem = true;
-                                parenthesisProblem = true;
                                 reverseRight = aux;
                                 wrong = c;
                                 if (reverseRight == '{') right = '}';
@@ -189,13 +165,6 @@ public class Main {
                     }
                 }
             }
-
-
-        return "Expressão: " + s + "\n" + "Erro de sintaxe: " + expression + "\n" +
-                "tamanho da pilha que sobrou: " + pilha.size();
-
-
+        return "Expressão: " + s + "\n" + "Erro de sintaxe: " + expression + " na expressão!";
         }
-
-
 }
