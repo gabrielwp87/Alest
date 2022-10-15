@@ -7,10 +7,10 @@ import java.util.EmptyStackException;
 
 public class Pilha {
 
-    //public class DoubleLinkedListOfInteger {
-        // Referencia para o sentinela de inicio da pilha usando estrtura encadeada.
+
+        // Referencia para o sentinela de inicio da pilha usando estrutura encadeada.
         private Node header;
-        // Referencia para o sentinela de fim da pilha usando estrtura encadeada.
+        // Referencia para o sentinela de fim da pilha usando estrutura encadeada.
         private Node trailer;
         // Contador do numero de elementos da pilha.
         private int count;
@@ -36,6 +36,7 @@ public class Pilha {
         }
 
         /**
+         * Topo da pilha -> header.next
          * Adiciona um elemento no topo da pilha
          * @param element elemento a ser adicionado
          */
@@ -54,6 +55,7 @@ public class Pilha {
 
 
         /**
+         * Topo da pilha -> header.next
          * Remove o elemento que está no topo da pilha
          * @return o elemento que estava no topo da pilha
          */
@@ -73,13 +75,14 @@ public class Pilha {
 
 
         /**
+         * Topo da pilha -> header.next
          * Retorna o elemento que se encontra no topo da lista
          * @throws EmptyStackException se a pilha estiver vazia
          */
         public Character top() {
             // Primeiro verifica se a pilha está vazia
             if (count <= 0) throw new EmptyStackException();
-            Node aux = trailer.prev;
+            Node aux = header.next;
 
             return aux.element;
         }

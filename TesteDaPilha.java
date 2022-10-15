@@ -13,6 +13,7 @@ public class TesteDaPilha {
         pilha.push('l');
 
         System.out.println("Tamanho da pilha: " + pilha.size());
+        System.out.println("O que há no topo da pilha: " + pilha.top());
 
         int tam = pilha.size();
         for (int i = 0; i < tam; i++)
@@ -36,6 +37,8 @@ public class TesteDaPilha {
         pilha2.push('l');
         pilha2.push('a');
         System.out.println("Tamanho da pilha 2: " + pilha2.size());
+        System.out.println("O que há no topo da pilha: " + pilha2.top());
+
 
         int tam2 = pilha2.size();
         for (int i = 0; i < tam2; i++)
