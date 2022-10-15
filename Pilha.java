@@ -83,7 +83,6 @@ public class Pilha {
             // Primeiro verifica se a pilha está vazia
             if (count <= 0) throw new EmptyStackException();
             Node aux = header.next;
-
             return aux.element;
         }
 
