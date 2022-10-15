@@ -1,6 +1,7 @@
 public class TesteDaPilha {
     public static void main(String[] args) {
         Pilha pilha = new Pilha();
+
         System.out.println("Recém criada a pilha e ela está vazia? " + pilha.isEmpty());
         pilha.push('g');
         System.out.println("Após adicionar um elemento a pilha está vazia? " + pilha.isEmpty());
@@ -25,6 +26,7 @@ public class TesteDaPilha {
 
         System.out.println();
         System.out.println("------------------------------------------------");
+
         Pilha pilha2 = new Pilha();
         System.out.println("Recém criada a pilha 2 e ela está vazia? " + pilha.isEmpty());
         pilha2.push('d');

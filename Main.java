@@ -14,12 +14,13 @@ public class Main {
         try {
             reader = Files.newBufferedReader(path1, Charset.defaultCharset());
             String line = null;
+            int nExpression = 0;
             while ((line = reader.readLine()) != null) {
-
-                System.out.println("Expressão do arquivo é válida? " + verificaExpressao(line)); //tirar
+                nExpression++;
+                System.out.println("Expressão " + nExpression + " do arquivo é válida? " + verificaExpressao(line)); //tirar
 
                 if (!verificaExpressao(line)) {
-                    //System.out.println(verificaErroDaExpressao(line));
+                    System.out.println(verificaErroDaExpressao(line));
                 }
 //                 else {
 //                    System.out.println(Calculator(line));
@@ -40,7 +41,7 @@ public class Main {
 //        System.out.println("{[()}} ? " + verificaExpressao("{[()}}"));
 //
 //        System.out.println("{[(]} ? " + verificaErroDaExpressao("{[(]}"));
-    System.out.println("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] } \n" + verificaErroDaExpressao("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] }"));
+  //  System.out.println("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] } \n" + verificaErroDaExpressao("{ [ [ ( 27 - 18 ) * 3 ] - [ ( 58 + 33 ) - [ ( 108 - 79 ] + 2 ) ] ] + [ ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ] }"));
 
     }
 
@@ -188,10 +189,6 @@ public class Main {
                     }
                 }
             }
-//            if (reverseRight == '{') right = '}';
-//            if (reverseRight == '[') right = ']';
-//            if (reverseRight == '(') right = ')';
-
 
 
         return "Expressão: " + s + "\n" + "Erro de sintaxe: " + expression + "\n" +
