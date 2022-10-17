@@ -1,107 +1,163 @@
 package src.main.usecases;
 
 import src.main.config.Config;
-import src.main.domain.enums.Operand;
+import src.main.domain.enums.Operator;
 import src.main.domain.model.ExpressionModel;
 import src.main.domain.types.Stack;
+
 
 public class CalculateExpressionUseCase {
     private CalculateExpressionUseCase() {
     }
 
-    public static double execute(ExpressionModel expressionModel) {
+    public static int execute(ExpressionModel expressionModel) {
+        System.out.println("CalculateExpressionUseCase - Process started");
 
-        //desempilha - > guarda em outra stack
 
-        // se for numero guarda ele como num1
+//{ ( 5 + 12 ) + [ ( 10 - 8 ) ^ 3 ] }
+//{ 17 + [ 2 ^ 3 ] }
 
-        //desempilha - > guarda em outra stack
-
-        // prox caractere = op
-
-        //desempilha - > guarda em outra stack
-
-        // prox caractere = num2
-
-        //desempilha - > guarda em outra stack
-
-        // faz operacao, pega resultado
-
-        // remove (...) da outra stack
-
-        // coloca numero
-
-//{ [ ( ( 2 ^ 5 ) - ( 3 * 15 ) ) + ( ( 102 + 379 ) * ( 468 - 248 ) ) ] - [ ( ( 3 ^ 6 ) - ( 54 * 11 ) ) + ( ( 175 / 5 ) / ( 100 - 117 ) ) ] }
         Stack stack = expressionModel.getExpression();
         Stack auxStack = new Stack();
-        int[] numbers = new int[2];
-        int i = 0;
-        boolean gotFirstNumber = false;
-        boolean gotSecondNumber = false;
-        boolean gotOperand = false;
-        while (!stack.isEmpty()) {
-            int number;
-            char operator;
+        Integer[] operands = new Integer[2];
+        Integer result = 0;
+        int operandsCount = 0;
+        Operator operator = null;
+        boolean closed = false;
+        boolean receivedNumber = false;
 
-            char element = stack.pop();
+        do {
+            if (stack.isEmpty()) {
+                auxStack.flip();
 
-            number = isNumber(element);
+                stack = Stack.clone(auxStack);
 
-            if (number != -1) {
-                //todo: e um numero
-                i++;
-                if (i > 1) i = 0;
-                numbers[i] = number;
-                if (i == 0) gotFirstNumber = true;
-                if (i == 1) gotSecondNumber = true;
+                auxStack.clear();
             }
 
-            if (isOpen(element)) {
-                //todo: e um abre
+            while (!stack.isEmpty()) {
+                char element = stack.pop();
+                auxStack.push(element);
+                System.out.println(auxStack);
+
+                if (isSpace(element)) {
+                    receivedNumber = false;
+                }
+
+                Integer number = isNumber(element);
+                if (number != null) {
+                    if (!receivedNumber) {
+                        receivedNumber = true;
+                        operands[operandsCount] = isNumber(element);
+
+                        operandsCount++;
+
+                    } else {
+                        operands[operandsCount - 1] = (operands[operandsCount - 1]) + (number * 10);
+                    }
+
+                }
+
+                if (isClose(element)) {
+                    receivedNumber = false;
+                    operands = new Integer[2];
+                    operandsCount = 0;
+                    if (!closed) {
+                        closed = true;
+                    }
+                }
+
+                if (isOpen(element)) {
+
+                    if (operandsCount == 2) {
+                        assert operator != null;
+
+                        result = calculate(operands[1], operator, operands[0]);
+                        char auxStackElement = auxStack.pop();
+
+                        while (!isClose(auxStackElement)) {
+                            auxStackElement = auxStack.pop();
+                        }
+                        // auxStack.pop();
+                        String resultString = result.toString();
+
+                        for (int i = resultString.length() - 1; i >= 0; i--) {
+                            auxStack.push(resultString.charAt(i));
+                        }
+                    }
+                    operands = new Integer[2];
+                    closed = false;
+                    receivedNumber = false;
+                    operandsCount = 0;
+
+                }
+
+                Operator operatorOrNull = isOperator(element);
+                if (operatorOrNull != null) {
+                    operator = operatorOrNull;
+                }
+
+
             }
+        } while (!isSolved(auxStack));
 
+        System.out.println("CalculateExpressionUseCase - Process started");
 
-            if (isClose(element)) {
-                //todo: e um fecha
-
-            }
-
-            Operand operand = isOperand(element);
-
-            if (operand != null) {
-                //todo: e um operador
-                gotOperand = true;
-            }
-
-            auxStack.push(element);
-
-        }
-        return 0;
+        return result;
     }
 
-    private static int isNumber(char element) {
+    private static Integer isNumber(char element) {
         for (int i = 0; i < Config.numbers.length; i++) {
             if (element == Config.numbers[i]) {
                 return i;
             }
         }
-        return -1;
+        return null;
     }
 
     private static boolean isOpen(char element) {
-        return true;
+        return element == '{' || element == '[' || element == '(';
     }
 
     private static boolean isClose(char element) {
+        return element == '}' || element == ']' || element == ')';
+
+    }
+
+    private static boolean isSolved(Stack stack) {
+        Stack cpyStack = Stack.clone(stack);
+        char element = ' ';
+        while (!cpyStack.isEmpty()) {
+            element = cpyStack.pop();
+            if (isOpen(element) || isClose(element) || isOperator(element) != null) return false;
+        }
+
         return true;
     }
 
-    private static Operand isOperand(char element) {
-        if (element == Operand.Division.getOperand()) return Operand.Division;
-        if (element == Operand.Addition.getOperand()) return Operand.Addition;
-        if (element == Operand.Subtraction.getOperand()) return Operand.Subtraction;
-        if (element == Operand.Exponential.getOperand()) return Operand.Exponential;
-        if (element == Operand.Multiplication.getOperand()) return Operand.Multiplication;
+    private static Integer calculate(Integer firstOperand, Operator operator, Integer secondOperand) {
+
+        return switch (operator) {
+            case Addition -> firstOperand + secondOperand;
+            case Division -> firstOperand / secondOperand;
+            case Exponential -> (int) Math.pow(firstOperand.floatValue(), secondOperand.floatValue());
+            case Subtraction -> firstOperand - secondOperand;
+            case Multiplication -> firstOperand * secondOperand;
+        };
+
+    }
+
+
+    private static Operator isOperator(char element) {
+        if (element == Operator.Division.getOperator()) return Operator.Division;
+        if (element == Operator.Addition.getOperator()) return Operator.Addition;
+        if (element == Operator.Subtraction.getOperator()) return Operator.Subtraction;
+        if (element == Operator.Exponential.getOperator()) return Operator.Exponential;
+        if (element == Operator.Multiplication.getOperator()) return Operator.Multiplication;
         return null;
+    }
+
+    private static boolean isSpace(char element) {
+        return element == ' ';
     }
 }

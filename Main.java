@@ -5,44 +5,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import src.main.controller.CalculatorController;
+import src.main.delivery.builder.ResponseBuilder;
+import src.main.domain.dto.ExpressionDto;
+import src.main.domain.model.ExpressionModel;
 import src.main.domain.types.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        BufferedReader reader;
-        Path path1 = Paths.get("expressoes2.txt"); // Começar com algo mais simples de testar,
-        // depois voltar para o arquivo: expressoes2.txt
         try {
-            reader = Files.newBufferedReader(path1, Charset.defaultCharset());
-            String line = null;
-            while ((line = reader.readLine()) != null) {
+            ExpressionDto expressionDto = new ExpressionDto("{ ( 5 + 12 ) + [ ( 10 - 8 ) ^ 3 ] }");
+            ExpressionModel expressionModel = CalculatorController.execute(expressionDto);
+            String response = ResponseBuilder.buildSuccess(expressionModel);
+            System.out.println(response);
 
-                System.out.println("Expressão do arquivo é válida? " + verificaExpressao(line)); // tirar
-
-                if (!verificaExpressao(line)) {
-                    // System.out.println(verificaErroDaExpressao(line));
-                }
-                // else {
-                // System.out.println(Calculator(line));
-                // }
-            }
-            reader.close();
-        } catch (IOException e) {
-            System.err.format("Erro na leitura do arquivo: ", e);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
-
-        // System.out.println("{[()]} ? " + verificaExpressao("{[()]}"));
-        // System.out.println("{[(2)]} ? " + verificaExpressao("{[(2)]}"));
-        // System.out.println("{[(2)]} ? " + verificaExpressao("{ [ ( 2 ) ] }"));
-        // System.out.println("{[(2)]} ? " + verificaExpressao("{ [ ( 2 + 2 ) ] }"));
-        // System.out.println("{[(2)]} ? " + verificaExpressao("{ 2 * [ 2 * ( 2 + 2 ) *
-        // 2 ] * 2 }"));
-        // System.out.println("{[(]} ? " + verificaExpressao("{[(]}"));
-        // System.out.println("{[()}} ? " + verificaExpressao("{[()}}"));
-        //
-        // System.out.println("{[(]} ? " + verificaErroDaExpressao("{[(]}"));
-        System.out.println("{ ( 12 + 34 ) * [ ( 47 - 17 / ( 60 - 20 ) ] } \n"
-                + verificaErroDaExpressao("{ ( 12 + 34 ) * [ ( 47 - 17 / ( 60 - 20 ) ] }"));
 
     }
 

@@ -3,6 +3,7 @@ package src.main.delivery.handler;
 import src.main.controller.CalculatorController;
 import src.main.delivery.builder.ResponseBuilder;
 import src.main.domain.dto.ExpressionDto;
+import src.main.domain.model.ExpressionModel;
 import src.main.infra.implementation.FileReaderImplementation;
 import src.main.interfaces.IFileReader;
 
@@ -15,19 +16,20 @@ public class FileReaderCalculatorHandler {
         try {
             IFileReader iFileReader = new FileReaderImplementation(filePath);
             String[] expressions = iFileReader.readAllLines();
-            for (int i = 0; i < expressions.length; i++) {
+            for (String expression : expressions) {
 
-                ExpressionDto expressionDto = new ExpressionDto(expressions[i]);
+                ExpressionDto expressionDto = new ExpressionDto(expression);
 
-                double result = CalculatorController.execute(expressionDto);
+                ExpressionModel expressionModel = CalculatorController.execute(expressionDto);
 
-                String response = ResponseBuilder.buildSuccess(result);
+                String response = ResponseBuilder.buildSuccess(expressionModel);
 
                 System.out.println(response);
             }
 
         } catch (Exception e) {
             // TODO: handle exception
+
         }
 
     }

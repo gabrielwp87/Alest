@@ -6,8 +6,8 @@ import src.main.domain.validation.ExpressionDtoValidation;
 public class ExpressionDto {
     private Stack expression;
 
-    public ExpressionDto(String expression) {
-        this.expression = ExpressionDtoValidation.validate(expression);
+    public ExpressionDto(String expressionString) {
+        expression = ExpressionDtoValidation.validate(expressionString);
     }
 
     public Stack getExpression() {
