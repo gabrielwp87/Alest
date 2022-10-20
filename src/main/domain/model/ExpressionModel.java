@@ -5,7 +5,7 @@ import src.main.domain.types.Stack;
 
 public class ExpressionModel {
     private final Stack expression;
-    private Integer result;
+    private Double result;
 
     public ExpressionModel(ExpressionDto expressionDto) {
         this.expression = expressionDto.getExpression();
@@ -15,11 +15,11 @@ public class ExpressionModel {
         return Stack.clone(expression);
     }
 
-    public Integer getResult() {
+    public Double getResult() {
         return result;
     }
 
-    public void setResult(Integer value) throws Exception {
+    public void setResult(Double value) throws Exception {
         if (result != null) throw new Exception("Can not reassign result value");
         result = value;
     }
