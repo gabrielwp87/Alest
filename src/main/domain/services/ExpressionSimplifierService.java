@@ -1,113 +1,56 @@
 package src.main.domain.services;
 
-import src.main.config.Config;
 import src.main.domain.calculator.Calculator;
 import src.main.domain.enums.Operator;
 import src.main.domain.types.Stack;
 
 public class ExpressionSimplifierService {
+
+    static Stack auxStack;
+
+    static Double[] operands;
+    static int operandsCount, decimalPlaces;
+    static Operator operator, operandSign;
+    static boolean closed;
+    static boolean receivedNumber;
+    static boolean receivedSubtractionOperator;
+
     private ExpressionSimplifierService() {
     }
 
     public static Stack simplify(Stack expressionStack) {
 
-        Stack auxStack = new Stack();
-        Double[] operands = new Double[2];
-        int operandsCount = 0, decimalPlaces = 0;
-        Operator operator = null, operandSign = null;
-        boolean closed = false;
-        boolean receivedNumber = false;
-        boolean receivedSubtractionOperator = false;
+        auxStack = new Stack();
+        operands = new Double[2];
+        operandsCount = 0;
+        decimalPlaces = 0;
+        operator = null;
+        operandSign = null;
+        closed = false;
+        receivedNumber = false;
+        receivedSubtractionOperator = false;
 
 
         while (!expressionStack.isEmpty()) {
             char element = expressionStack.pop();
             auxStack.push(element);
 
-            if (isSpace(element)) {
-                receivedNumber = false;
-                receivedSubtractionOperator = false;
-            }
+            if (isSpace(element)) processSpace();
 
             Operator operatorOrNull = isOperator(element);
-            if (operatorOrNull != null) {
-                if (receivedNumber) operandSign = operatorOrNull;
-                else operator = operatorOrNull;
+            if (operatorOrNull != null) processOperator(operatorOrNull);
 
-                if (operatorOrNull == Operator.Subtraction) {
-                    receivedSubtractionOperator = true;
-                } else {
-                    receivedSubtractionOperator = false;
+            if (receivedNumber && receivedSubtractionOperator) processNegativeNumber();
 
-                }
-            }
-
-            if (receivedNumber && receivedSubtractionOperator) {
-                operands[operandsCount - 1] = operands[operandsCount - 1] * -1;
-            }
-
-            if (element == '.' && receivedNumber) {
-                operands[operandsCount - 1] = operands[operandsCount - 1] / Math.pow(10, decimalPlaces);
-                decimalPlaces = 1;
-            }
+            if (element == '.' && receivedNumber) processDecimal();
 
             Double number = isNumber(element);
-            if (number != null) {
-                decimalPlaces++;
-                if (!receivedNumber) {
-                    receivedNumber = true;
-                    operands[operandsCount] = number;
-                    operandsCount++;
+            if (number != null) processNumber(number);
+            else decimalPlaces = 0;
 
-                } else {
-                    double result = (number * (Math.pow(10, decimalPlaces - 1)));
+            if (isClose(element)) processClose();
 
-                    if (operands[operandsCount - 1] < 0) {
-                        operands[operandsCount - 1] = (operands[operandsCount - 1]) - result;
-                    } else {
-                        operands[operandsCount - 1] = (operands[operandsCount - 1]) + result;
-                    }
-
-                }
-
-            } else decimalPlaces = 0;
-
-
-            if (isClose(element)) {
-                receivedNumber = false;
-                receivedSubtractionOperator = false;
-                operands = new Double[2];
-                operandsCount = 0;
-                if (!closed) {
-                    closed = true;
-                }
-            }
-
-            if (isOpen(element)) {
-
-                if (operandsCount == 2) {
-                    assert operator != null;
-
-                    String resultString = Calculator.calculate(operands[1], operator, operands[0]).toString();
-                    char auxStackElement = auxStack.pop();
-
-                    while (!isClose(auxStackElement)) {
-                        auxStackElement = auxStack.pop();
-                    }
-
-                    for (int i = resultString.length() - 1; i >= 0; i--) {
-                        auxStack.push(resultString.charAt(i));
-                    }
-                }
-                operands = new Double[2];
-                closed = false;
-                receivedNumber = false;
-                operandsCount = 0;
-                receivedSubtractionOperator = false;
-
-
-            }
-
+            if (isOpen(element)) processOpen();
 
         }
 
@@ -145,7 +88,81 @@ public class ExpressionSimplifierService {
         return null;
     }
 
-    static boolean isSpace(char element) {
+    private static boolean isSpace(char element) {
         return element == ' ';
     }
+
+    private static void processSpace() {
+        receivedNumber = false;
+        receivedSubtractionOperator = false;
+    }
+
+    private static void processOperator(Operator element) {
+        if (receivedNumber) operandSign = element;
+        else operator = element;
+
+        receivedSubtractionOperator = element == Operator.Subtraction;
+    }
+
+    private static void processNumber(Double number) {
+        decimalPlaces++;
+        if (!receivedNumber) {
+            receivedNumber = true;
+            operands[operandsCount] = number;
+            operandsCount++;
+
+        } else {
+            double result = (number * (Math.pow(10, decimalPlaces - 1)));
+
+            if (operands[operandsCount - 1] < 0) {
+                operands[operandsCount - 1] = (operands[operandsCount - 1]) - result;
+            } else {
+                operands[operandsCount - 1] = (operands[operandsCount - 1]) + result;
+            }
+
+        }
+    }
+
+    private static void processOpen() {
+        if (operandsCount == 2) {
+            assert operator != null;
+
+            String resultString = Calculator.calculate(operands[1], operator, operands[0]).toString();
+            char auxStackElement = auxStack.pop();
+
+            while (!isClose(auxStackElement)) {
+                auxStackElement = auxStack.pop();
+            }
+
+            for (int i = resultString.length() - 1; i >= 0; i--) {
+                auxStack.push(resultString.charAt(i));
+            }
+        }
+        operands = new Double[2];
+        closed = false;
+        receivedNumber = false;
+        operandsCount = 0;
+        receivedSubtractionOperator = false;
+    }
+
+    private static void processClose() {
+        receivedNumber = false;
+        receivedSubtractionOperator = false;
+        operands = new Double[2];
+        operandsCount = 0;
+        if (!closed) {
+            closed = true;
+        }
+    }
+
+    private static void processDecimal() {
+        operands[operandsCount - 1] = operands[operandsCount - 1] / Math.pow(10, decimalPlaces);
+        decimalPlaces = 1;
+    }
+
+    private static void processNegativeNumber() {
+        operands[operandsCount - 1] = operands[operandsCount - 1] * -1;
+
+    }
+
 }
