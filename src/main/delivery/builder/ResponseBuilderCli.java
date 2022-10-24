@@ -2,8 +2,8 @@ package src.main.delivery.builder;
 
 import src.main.domain.model.ExpressionModel;
 
-public class ResponseBuilder {
-    private ResponseBuilder() {
+public class ResponseBuilderCli {
+    private ResponseBuilderCli() {
     }
 
     public static String buildSuccess(ExpressionModel expressionModel) {

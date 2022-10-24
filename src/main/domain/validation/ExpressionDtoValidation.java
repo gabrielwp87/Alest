@@ -11,11 +11,11 @@ public class ExpressionDtoValidation {
     }
 
     public static Stack validate(String expression) throws InvalidExpressionException {
-        if (!verificaExpressao(expression)) {
-            reason = verificaErroDaExpressao(expression);
+        if (!verifyExpression(expression)) {
+            reason = verifyExpressionError(expression);
             throw new InvalidExpressionException(reason, expression);
         }
-        if (!verificaSintaxe(expression)) {
+        if (!verifySyntax(expression)) {
             throw new InvalidExpressionException(reason, expression);
         }
         Stack expressionStack = new Stack();
@@ -24,7 +24,7 @@ public class ExpressionDtoValidation {
         return expressionStack;
     }
 
-    private static boolean verificaExpressao(String s) {
+    private static boolean verifyExpression(String s) {
         Stack pilha = new Stack();
 
         for (int i = 0; i < s.length(); i++) {
@@ -59,7 +59,7 @@ public class ExpressionDtoValidation {
         return s.substring(0, position - 1) + " >>" + s.charAt(position) + "<< " + s.substring(position);
     }
 
-    private static boolean verificaSintaxe(String s) {
+    private static boolean verifySyntax(String s) {
 
         for (int i = 0; i < s.length() - 1; i++) {
             char element = s.charAt(i);
@@ -107,11 +107,11 @@ public class ExpressionDtoValidation {
             }
 
             if (isOpen(element)) {
-                if (!onlySpaceAllowed(s, i)) return false;
+                if (!onlySpaceAllowedArround(s, i)) return false;
             }
 
             if (isClose(element)) {
-                if (!onlySpaceAllowed(s, i)) return false;
+                if (!onlySpaceAllowedArround(s, i)) return false;
             }
 
             if (isSpace(element)) {
@@ -186,7 +186,7 @@ public class ExpressionDtoValidation {
         return true;
     }
 
-    private static boolean onlySpaceAllowed(String s, int i) {
+    private static boolean onlySpaceAllowedArround(String s, int i) {
         if (i > 0 && !isSpace(s.charAt(i - 1))) {
             reason = "15 - Expressão deve conter um espaço no lugar de um '" + s.charAt(i - 1) + "' na posição " + (i - 1) + ". \n" + showErrorPosition(s, i - 1);
             ;
@@ -232,7 +232,7 @@ public class ExpressionDtoValidation {
         return element == ' ';
     }
 
-    private static String verificaErroDaExpressao(String s) {
+    private static String verifyExpressionError(String s) {
         Stack pilha = new Stack();
         Stack pilhaInicial = new Stack();
         Stack pilhaChaves = new Stack();

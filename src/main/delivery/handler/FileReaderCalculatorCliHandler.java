@@ -1,12 +1,10 @@
 package src.main.delivery.handler;
 
 import src.main.controller.CalculatorController;
-import src.main.delivery.builder.ResponseBuilder;
+import src.main.delivery.builder.ResponseBuilderCli;
 import src.main.domain.dto.ExpressionDto;
 import src.main.domain.exceptions.InvalidExpressionException;
 import src.main.domain.model.ExpressionModel;
-import src.main.infra.implementation.FileReaderImplementation;
-import src.main.interfaces.IFileReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,20 +13,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class FileReaderCalculatorHandler {
-    private FileReaderCalculatorHandler() {
+public class FileReaderCalculatorCliHandler {
+    private FileReaderCalculatorCliHandler() {
     }
 
     public static void execute(String filePath) {
 
         try {
-            //IFileReader iFileReader = new FileReaderImplementation(filePath);
-            //String[] expressions = iFileReader.readAllLines();
+
             BufferedReader reader;
             Path path1 = Paths.get(filePath);
             try {
                 reader = Files.newBufferedReader(path1, Charset.defaultCharset());
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     try {
                         System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -37,11 +34,11 @@ public class FileReaderCalculatorHandler {
 
                         ExpressionModel expressionModel = CalculatorController.execute(expressionDto);
 
-                        String response = ResponseBuilder.buildSuccess(expressionModel);
+                        String response = ResponseBuilderCli.buildSuccess(expressionModel);
 
                         System.out.println(response);
                     } catch (InvalidExpressionException e) {
-                        String response = ResponseBuilder.buildError(e.getMessage(), e.getExpression());
+                        String response = ResponseBuilderCli.buildError(e.getMessage(), e.getExpression());
                         System.out.println(response);
 
                     }

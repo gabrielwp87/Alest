@@ -5,13 +5,12 @@ public enum Operator {
     Multiplication('*'),
     Division('/'),
     Exponential('^'),
-
     Subtraction('-');
 
     private final char operator;
 
-    Operator(char operand) {
-        this.operator = operand;
+    Operator(char operator) {
+        this.operator = operator;
     }
 
     public char getOperator() {

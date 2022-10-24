@@ -61,7 +61,7 @@ public class ExpressionSimplifierService {
 
     }
 
-    static Double isNumber(char element) {
+    public static Double isNumber(char element) {
         try {
             return Double.parseDouble(String.valueOf(element));
         } catch (NumberFormatException err) {

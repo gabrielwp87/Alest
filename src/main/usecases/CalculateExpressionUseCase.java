@@ -21,7 +21,6 @@ public class CalculateExpressionUseCase {
             expressionStack = ExpressionSimplifierService.simplify(expressionStack);
             System.out.println("Step " + step + " -> " + expressionStack);
 
-
         }
 
         Stack resultStack = Stack.clone(expressionStack);
