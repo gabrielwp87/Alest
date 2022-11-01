@@ -24,7 +24,7 @@ para manter os padrões disponibilizado pela professora.
 
 # Descrição
 
----
+--- 
 
 O algoritmo foi desenvolvido em 4 camadas de abstração:
 
