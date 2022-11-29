@@ -42,7 +42,7 @@ public class BinarySearchTreeAvlOfInteger {
         return count;
     }
 
-    public void add(Integer element) {//todo:notacao
+    public void add(Integer element) {//Notação: O(n)
         root =  add(root,element,null);
         count++;
         balance();
@@ -84,7 +84,7 @@ public class BinarySearchTreeAvlOfInteger {
 
     }
 
-    public BinarySearchTreeAvlOfInteger clone(){//todo:notacao
+    public BinarySearchTreeAvlOfInteger clone(){//Notação: O(n)
         LinkedListOfInteger positions = positionsWidth();
         BinarySearchTreeAvlOfInteger aux = new BinarySearchTreeAvlOfInteger();
         for(int i =0 ;i<positions.size();i++){
@@ -155,7 +155,7 @@ public class BinarySearchTreeAvlOfInteger {
         return res;
     }
 
-    public boolean contains(Integer element) {//todo:notacao
+    public boolean contains(Integer element) {//Notacao: O(n)
         try{
             searchNodeRef(element,root);
             return true;
