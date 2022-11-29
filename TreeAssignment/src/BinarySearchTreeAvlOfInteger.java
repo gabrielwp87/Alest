@@ -42,13 +42,6 @@ public class BinarySearchTreeAvlOfInteger {
         return count;
     }
 
-    public Integer getRoot() {
-        if (isEmpty()) {
-            throw new EmptyTreeException();
-        }
-        return root.element;
-    }
-
     public void add(Integer element) {//todo:notacao
         root =  add(root,element,null);
         count++;
@@ -162,14 +155,6 @@ public class BinarySearchTreeAvlOfInteger {
         return res;
     }
 
-    public String strTraversalCentral() {
-        return strTraversalCentral(root);
-    }
-
-    private String strTraversalCentral(Node n) {
-        return null;
-    }
-
     public boolean contains(Integer element) {//todo:notacao
         try{
             searchNodeRef(element,root);
@@ -220,12 +205,6 @@ public class BinarySearchTreeAvlOfInteger {
             return searchNodeRef(element,n.right.left);
         }
 
-    }
-
-
-    public boolean remove(Integer element) {
-
-        return false;
     }
 
 
